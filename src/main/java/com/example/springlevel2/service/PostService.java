@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.InvalidKeyException;
 import java.util.List;
 
 @Service
@@ -42,29 +41,33 @@ public class PostService {
     @Transactional
     public PostResponseDto updatePost(Long id, String token, PostRequestDto requestDto) {
         Post post = findPost(id);
-        String substringToken = jwtUtil.substringToken(token);
 
-        if (isValidateToken(substringToken)) {
+        if (isValidate(token, post)) {
             post.update(requestDto);
+
             return new PostResponseDto(post);
         }
 
         return null;
     }
 
-    private boolean isValidateToken(String token) {
-        return jwtUtil.validateToken(token);
-    }
-
     public void deletePost(String token, Long id, PostRequestDto requestDto) {
         Post post = findPost(id);
+
+        if (isValidate(token, post)) {
+            postRepository.delete(post);
+        }
+    }
+
+    private boolean isValidate(String token, Post post) {
         // 토큰 검사
         String username = getUsernameFromJwt(token);
 
-        // 작성자가 맞는지 검사
         if (username.equals(post.getUsername())) {
-            postRepository.delete(post);
+            return true;
         }
+
+        return false;
     }
 
     private Post findPost(Long id) {

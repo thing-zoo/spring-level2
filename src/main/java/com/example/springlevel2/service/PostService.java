@@ -4,10 +4,12 @@ import com.example.springlevel2.dto.PostRequestDto;
 import com.example.springlevel2.dto.PostResponseDto;
 import com.example.springlevel2.entity.Post;
 import com.example.springlevel2.repository.PostRepository;
+import com.example.springlevel2.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.InvalidKeyException;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,6 +17,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final JwtUtil jwtUtil;
 
     public PostResponseDto createPost(PostRequestDto requestDto) {
         Post post = new Post(requestDto);
@@ -37,12 +40,20 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponseDto updatePost(Long id, PostRequestDto requestDto) {
+    public PostResponseDto updatePost(Long id, String token, PostRequestDto requestDto) {
         Post post = findPost(id);
-//      post.update(requestDto);
+        String substringToken = jwtUtil.substringToken(token);
 
-        return new PostResponseDto(post);
+        if (isValidateToken(substringToken)) {
+            post.update(requestDto);
+            return new PostResponseDto(post);
+        }
 
+        return null;
+    }
+
+    private boolean isValidateToken(String token) {
+        return jwtUtil.validateToken(token);
     }
 
     public void deletePost(Long id) {

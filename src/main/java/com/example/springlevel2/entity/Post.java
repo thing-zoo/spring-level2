@@ -22,12 +22,12 @@ public class Post extends Timestamped {
     private String content;
 
     @Column(nullable = false)
-    private String author;
+    private String username;
 
     public Post(PostRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
-        this.author = requestDto.getAuthor();
+        this.username = requestDto.getUsername();
     }
 
     public void update(PostRequestDto requestDto) {

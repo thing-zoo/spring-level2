@@ -11,5 +11,5 @@ public class PostRequestDto {
     @NotNull
     private String content;
     @NotNull
-    private String author;
+    private String username;
 }

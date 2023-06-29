@@ -36,8 +36,9 @@ public class PostController {
 
     // 선택한 게시글 수정
     @PutMapping("/posts/{id}")
-    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto) {
-        PostResponseDto responseDto = postService.updatePost(id, requestDto);
+    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long id,@RequestHeader("Authorization") String token, @RequestBody PostRequestDto requestDto) {
+        PostResponseDto responseDto = postService.updatePost(id, token, requestDto);
+
         return ResponseEntity.ok(responseDto);
     }
 

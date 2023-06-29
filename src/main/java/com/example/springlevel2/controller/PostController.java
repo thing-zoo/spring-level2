@@ -4,7 +4,6 @@ import com.example.springlevel2.dto.PostRequestDto;
 import com.example.springlevel2.dto.PostResponseDto;
 import com.example.springlevel2.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,12 +35,12 @@ public class PostController {
     }
 
     // 선택한 게시글 수정
-    @PutMapping(path = "/posts/{id}", headers = "Authorization")
-    public ResponseEntity<PostResponseDto> updatePost(@RequestHeader("Authorization") String token,
-                                                      @PathVariable Long id,
+    @PutMapping("/posts/{id}")
+    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long id,
+                                                      @RequestHeader("Authorization") String token,
                                                       @RequestBody PostRequestDto requestDto) {
-        System.out.println(token);
-        PostResponseDto responseDto = postService.updatePost(token, id, requestDto);
+        PostResponseDto responseDto = postService.updatePost(id, token, requestDto);
+
         return ResponseEntity.ok(responseDto);
     }
 

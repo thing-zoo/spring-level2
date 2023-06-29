@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.InvalidKeyException;
 import java.util.List;
 
 @Service
@@ -18,13 +19,13 @@ public class PostService {
     private final PostRepository postRepository;
     private final JwtUtil jwtUtil;
 
-//    public PostResponseDto createPost(PostRequestDto requestDto) {
-//        Post post = new Post(requestDto);
-//
-//        Post savedPost = postRepository.save(post);
-//
-//        return new PostResponseDto(post);
-//    }
+    public PostResponseDto createPost(PostRequestDto requestDto) {
+        Post post = new Post(requestDto);
+
+        Post savedPost = postRepository.save(post);
+
+        return new PostResponseDto(post);
+    }
 
     public List<PostResponseDto> getPosts() {
         return postRepository
@@ -39,17 +40,20 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponseDto updatePost(String token, Long id, PostRequestDto requestDto) {
+    public PostResponseDto updatePost(Long id, String token, PostRequestDto requestDto) {
         Post post = findPost(id);
-        // 토큰 검사
-        String username = getUsernameFromJwt(token);
+        String substringToken = jwtUtil.substringToken(token);
 
-        // 작성자가 맞는지 검사
-        if (username.equals(post.getUsername())) {
+        if (isValidateToken(substringToken)) {
             post.update(requestDto);
+            return new PostResponseDto(post);
         }
 
-        return new PostResponseDto(post);
+        return null;
+    }
+
+    private boolean isValidateToken(String token) {
+        return jwtUtil.validateToken(token);
     }
 
     public void deletePost(String token, Long id, PostRequestDto requestDto) {

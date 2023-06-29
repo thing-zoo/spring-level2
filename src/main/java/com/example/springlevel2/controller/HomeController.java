@@ -1,17 +1,20 @@
 package com.example.springlevel2.controller;
 
+import com.example.springlevel2.dto.UserRequsetDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class HomeController {
-    @GetMapping("/users/signup")
-    public ResponseEntity home(Model model) {
-        model.addAttribute("username", "username");
+    @PostMapping("/users/signup")
+    public void signup(@RequestBody UserRequsetDto requsetDto) {
+
+    }
+
+    @PostMapping("/users/login")
+    public void login(@RequestBody UserRequsetDto requsetDto) {
 
     }
 }

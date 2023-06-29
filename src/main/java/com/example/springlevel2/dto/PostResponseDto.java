@@ -12,8 +12,7 @@ public class PostResponseDto {
     private Long id;
     private String title;
     private String content;
-    private String author;
-    private String password;
+    private String username;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -21,7 +20,7 @@ public class PostResponseDto {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.author = post.getAuthor();
+        this.username = post.getUsername();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
     }

@@ -3,7 +3,7 @@ package com.example.springlevel2.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public class UserRequsetDto {
+public class UserRequestDto {
     @NotBlank
     @Pattern(regexp = "^[a-z0-9]{4,10}$")
     private String username;

@@ -4,6 +4,7 @@ import com.example.springlevel2.dto.PostRequestDto;
 import com.example.springlevel2.dto.PostResponseDto;
 import com.example.springlevel2.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,12 +16,14 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
 
-    // 게시글 작성
-//    @PostMapping("/posts")
-//    public ResponseEntity<PostResponseDto> createPost(@RequestBody PostRequestDto requestDto) {
-//        PostResponseDto responseDto = postService.createPost(requestDto);
-//        return ResponseEntity.ok(responseDto);
-//    }
+     // 게시글 작성
+    @PostMapping("/posts")
+    public ResponseEntity<PostResponseDto> createPost(@RequestHeader("Authorization") String token,
+                                                      @RequestBody PostRequestDto requestDto) {
+        PostResponseDto responseDto = postService.createPost(token, requestDto);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    }
 
     // 전체 게시글 조회
     @GetMapping("/posts")

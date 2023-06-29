@@ -18,12 +18,17 @@ public class PostService {
     private final PostRepository postRepository;
     private final JwtUtil jwtUtil;
 
-    public PostResponseDto createPost(PostRequestDto requestDto) {
-        Post post = new Post(requestDto);
+    public PostResponseDto createPost(String token, PostRequestDto requestDto) {
+        String substringToken = jwtUtil.substringToken(token);
+        boolean isValidateToken = jwtUtil.validateToken(substringToken);
 
-        Post savedPost = postRepository.save(post);
+        if (isValidateToken) {
+            Post post = new Post(requestDto);
+            Post savedPost = postRepository.save(post);
+            return new PostResponseDto(savedPost);
+        }
 
-        return new PostResponseDto(post);
+        return null;
     }
 
     public List<PostResponseDto> getPosts() {

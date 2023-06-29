@@ -1,8 +1,6 @@
 package com.example.springlevel2.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 
 @Entity
@@ -13,12 +11,10 @@ public class User extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Pattern(regexp = "^[a-z0-9]{4,10}$")
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @NotBlank
-    @Pattern(regexp = "^[A-Za-z0-9]{6,12}$")
+    @Column(nullable = false)
     private String password;
+
 }

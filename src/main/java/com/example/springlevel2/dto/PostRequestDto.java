@@ -10,6 +10,4 @@ public class PostRequestDto {
     private String title;
     @NotNull
     private String content;
-    @NotNull
-    private String username;
 }

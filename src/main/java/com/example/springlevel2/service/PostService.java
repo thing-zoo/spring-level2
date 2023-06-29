@@ -5,13 +5,13 @@ import com.example.springlevel2.dto.PostResponseDto;
 import com.example.springlevel2.entity.Post;
 import com.example.springlevel2.repository.PostRepository;
 import com.example.springlevel2.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.InvalidKeyException;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -56,13 +56,37 @@ public class PostService {
         return jwtUtil.validateToken(token);
     }
 
-    public void deletePost(Long id) {
+    public void deletePost(String token, Long id, PostRequestDto requestDto) {
         Post post = findPost(id);
-//        postRepository.delete(post);
+        // 토큰 검사
+        String username = getUsernameFromJwt(token);
+
+        // 작성자가 맞는지 검사
+        if (username.equals(post.getUsername())) {
+            postRepository.delete(post);
+        }
     }
 
     private Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("선택한 게시물은 존재하지 않습니다."));
+    }
+
+    private String getUsernameFromJwt(String tokenValue) {
+        // JWT 토큰 substring
+        String token = jwtUtil.substringToken(tokenValue);
+
+        // 토큰 검증
+        if(!jwtUtil.validateToken(token)){
+            throw new IllegalArgumentException("Token Error");
+        }
+
+        // 토큰에서 사용자 정보 가져오기
+        Claims info = jwtUtil.getUserInfoFromToken(token);
+        // 사용자 username
+        String username = info.getSubject();
+        System.out.println("username = " + username);
+
+        return username;
     }
 }

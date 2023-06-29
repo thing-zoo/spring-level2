@@ -16,11 +16,11 @@ public class PostController {
     private final PostService postService;
 
     // 게시글 작성
-    @PostMapping("/posts")
-    public ResponseEntity<PostResponseDto> createPost(@RequestBody PostRequestDto requestDto) {
-        PostResponseDto responseDto = postService.createPost(requestDto);
-        return ResponseEntity.ok(responseDto);
-    }
+//    @PostMapping("/posts")
+//    public ResponseEntity<PostResponseDto> createPost(@RequestBody PostRequestDto requestDto) {
+//        PostResponseDto responseDto = postService.createPost(requestDto);
+//        return ResponseEntity.ok(responseDto);
+//    }
 
     // 전체 게시글 조회
     @GetMapping("/posts")
@@ -36,15 +36,20 @@ public class PostController {
 
     // 선택한 게시글 수정
     @PutMapping("/posts/{id}")
-    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long id,@RequestHeader("Authorization") String token, @RequestBody PostRequestDto requestDto) {
+    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long id,
+                                                      @RequestHeader("Authorization") String token,
+                                                      @RequestBody PostRequestDto requestDto) {
         PostResponseDto responseDto = postService.updatePost(id, token, requestDto);
 
         return ResponseEntity.ok(responseDto);
     }
 
     // 선택한 게시글 삭제
-//    @DeleteMapping("/posts/{id}")
-//    public PostResponseDto deletePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto) {
-//
-//    }
+    @DeleteMapping("/posts/{id}")
+    public ResponseEntity<String> deletePost(@RequestHeader("Authorization") String token,
+                                      @PathVariable Long id,
+                                      @RequestBody PostRequestDto requestDto) {
+        postService.deletePost(token, id, requestDto);
+        return ResponseEntity.ok().body("게시글 삭제 성공");
+    }
 }

@@ -1,17 +1,18 @@
 package com.example.springlevel2.dto;
 
 import com.example.springlevel2.entity.Post;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@JsonInclude(JsonInclude.Include.NON_NULL) //명시한 값만 json에 포함!!
 public class PostResponseDto {
     private Long id;
     private String title;
     private String content;
-    private String author;
-    private String password;
+    private String username;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -19,7 +20,7 @@ public class PostResponseDto {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.author = post.getAuthor();
+        this.username = post.getUsername();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
     }

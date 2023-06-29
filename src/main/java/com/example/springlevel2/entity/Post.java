@@ -4,36 +4,36 @@ import com.example.springlevel2.dto.PostRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
-@Table
+@Table(name = "post")
 public class Post extends Timestamped {
     @Id
+    @Column(name = "post_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private String title;
+
     @Column(nullable = false)
     private String content;
+
     @Column(nullable = false)
-    private String author;
-    @Column(nullable = false)
-    private String password;
+    private String username;
 
     public Post(PostRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
-        this.author = requestDto.getAuthor();
-        this.password = requestDto.getPassword();
+        this.username = requestDto.getUsername();
     }
 
     public void update(PostRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
     }
+
 }
 

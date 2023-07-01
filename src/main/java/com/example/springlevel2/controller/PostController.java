@@ -3,6 +3,7 @@ package com.example.springlevel2.controller;
 import com.example.springlevel2.dto.PostRequestDto;
 import com.example.springlevel2.dto.PostResponseDto;
 import com.example.springlevel2.service.PostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class PostController {
      // 게시글 작성
     @PostMapping("/posts")
     public ResponseEntity<PostResponseDto> createPost(@RequestHeader("Authorization") String token,
-                                                      @RequestBody PostRequestDto requestDto) {
+                                                      @RequestBody @Valid PostRequestDto requestDto) {
         PostResponseDto responseDto = postService.createPost(token, requestDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
@@ -41,7 +42,7 @@ public class PostController {
     @PutMapping("/posts/{id}")
     public ResponseEntity<PostResponseDto> updatePost(@RequestHeader("Authorization") String token,
                                                       @PathVariable Long id,
-                                                      @RequestBody PostRequestDto requestDto) {
+                                                      @RequestBody @Valid PostRequestDto requestDto) {
         PostResponseDto responseDto = postService.updatePost(id, token, requestDto);
 
         return ResponseEntity.ok(responseDto);
@@ -51,7 +52,7 @@ public class PostController {
     @DeleteMapping("/posts/{id}")
     public ResponseEntity<String> deletePost(@RequestHeader("Authorization") String token,
                                              @PathVariable Long id,
-                                             @RequestBody PostRequestDto requestDto) {
+                                             @RequestBody @Valid PostRequestDto requestDto) {
         postService.deletePost(token, id, requestDto);
         return ResponseEntity.ok().body("게시글 삭제 성공");
     }

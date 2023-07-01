@@ -47,7 +47,7 @@ public class PostService {
     public PostResponseDto updatePost(Long id, String token, PostRequestDto requestDto) {
         Post post = findPost(id);
 
-        if (isValidate(token, post)) {
+        if (isValid(token, post)) {
             post.update(requestDto);
 
             return new PostResponseDto(post);
@@ -59,12 +59,12 @@ public class PostService {
     public void deletePost(String token, Long id, PostRequestDto requestDto) {
         Post post = findPost(id);
 
-        if (isValidate(token, post)) {
+        if (isValid(token, post)) {
             postRepository.delete(post);
         }
     }
 
-    private boolean isValidate(String token, Post post) {
+    private boolean isValid(String token, Post post) {
         // 토큰 검사
         String username = getUsernameFromJwt(token);
 

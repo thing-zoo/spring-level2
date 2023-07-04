@@ -21,9 +21,10 @@ public class PostService {
     public PostResponseDto createPost(String token, PostRequestDto requestDto) {
         String substringToken = jwtUtil.substringToken(token);
         boolean isValidateToken = jwtUtil.validateToken(substringToken);
+        String username = jwtUtil.getUsernameFromJwt(token);
 
         if (isValidateToken) {
-            Post post = new Post(requestDto);
+            Post post = new Post(requestDto, username);
             Post savedPost = postRepository.save(post);
             return new PostResponseDto(savedPost);
         }
@@ -65,36 +66,13 @@ public class PostService {
     }
 
     private boolean isValid(String token, Post post) {
-        // 토큰 검사
-        String username = getUsernameFromJwt(token);
+        String username = jwtUtil.getUsernameFromJwt(token);
 
-        if (username.equals(post.getUsername())) {
-            return true;
-        }
-
-        return false;
+        return username.equals(post.getUsername());
     }
 
     private Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("선택한 게시물은 존재하지 않습니다."));
-    }
-
-    private String getUsernameFromJwt(String tokenValue) {
-        // JWT 토큰 substring
-        String token = jwtUtil.substringToken(tokenValue);
-
-        // 토큰 검증
-        if(!jwtUtil.validateToken(token)){
-            throw new IllegalArgumentException("Token Error");
-        }
-
-        // 토큰에서 사용자 정보 가져오기
-        Claims info = jwtUtil.getUserInfoFromToken(token);
-        // 사용자 username
-        String username = info.getSubject();
-        System.out.println("username = " + username);
-
-        return username;
     }
 }

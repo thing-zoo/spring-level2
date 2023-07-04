@@ -85,4 +85,22 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+    public String getUsernameFromJwt(String tokenValue) {
+        // JWT 토큰 substring
+        String token = substringToken(tokenValue);
+
+        // 토큰 검증
+        if(!validateToken(token)){
+            throw new IllegalArgumentException("Token Error");
+        }
+
+        // 토큰에서 사용자 정보 가져오기
+        Claims info = getUserInfoFromToken(token);
+        // 사용자 username
+        String username = info.getSubject();
+        System.out.println("username = " + username);
+
+        return username;
+    }
 }

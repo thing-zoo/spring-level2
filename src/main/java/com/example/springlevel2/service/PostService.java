@@ -57,12 +57,14 @@ public class PostService {
         return null;
     }
 
-    public void deletePost(String token, Long id, PostRequestDto requestDto) {
+    public String deletePost(String token, Long id) {
         Post post = findPost(id);
 
         if (isValid(token, post)) {
             postRepository.delete(post);
+            return "게시물 삭제 성공";
         }
+        return "게시물 삭제 실패";
     }
 
     private boolean isValid(String token, Post post) {
